@@ -1,9 +1,8 @@
-# Specify any green letters in KNOWN_LETTERS array
-# Leave blank strings in KNOWN_LETTERS array for non-greens
-# Specify any gray/excluded letters in EXCLUDED_LETTERS array
+# Fill in known letters
 
-KNOWN_LETTERS = ["","","e","a","d"]
-EXCLUDED_LETTERS = ["r"]
+GREEN_LETTERS = ["","","","",""]
+YELLOW_LETTERS = [["s", "c"],[],["o"],[],[]]
+EXCLUDED_LETTERS = ["a", "l", "e", "t", "r", "w", "d"]
 INPUT_FILE = "shuffled_wordle_words.txt"
 
 with open(INPUT_FILE) as f:
@@ -65,17 +64,46 @@ def find_best_words_to_guess(common_letters_dict, word_list):
     return sorted(word_scores.items(), key =
              lambda kv:(kv[1], kv[0]), reverse=True)
 
+def filter_words_by_yellow_letters(yellow_letters, word_list):
+    filtered_word_list = []
+    for word in word_list:
+        word_has_potential = True
+        for slot in range(5):
+            if not word_has_potential: break
+            for letter in yellow_letters[slot]:
+                if letter not in word:
+                    word_has_potential = False
+                    break
+                elif word[slot] == letter:
+                    word_has_potential = False
+                    break
+        if word_has_potential:
+            filtered_word_list.append(word)         
+    return filtered_word_list
 
-filtered_words = filter_words_by_known_letters(KNOWN_LETTERS, word_list)
+
+
+# Words with GREEN letters
+filtered_words = filter_words_by_known_letters(GREEN_LETTERS, word_list)
 print("\nFILTERED BY KNOWN GREEN LETTERS:")
 print(filtered_words)
+
+# Words NOT with GRAY letters
 filtered_words = filter_words_by_excluded_letters(EXCLUDED_LETTERS, filtered_words)
 print("\nFILTERED BY KNOWN GRAY LETTERS:")
 print(filtered_words)
-common_letters = find_most_common_unknown_letters(KNOWN_LETTERS, filtered_words)
+
+# Words with YELLOW letters
+filtered_words = filter_words_by_yellow_letters(YELLOW_LETTERS, filtered_words)
+print("\nFILTERED BY KNOWN YELLOW LETTERS:")
+print(filtered_words)
+
+# Sort remaining words by most common unknown letters
+common_letters = find_most_common_unknown_letters(GREEN_LETTERS, filtered_words)
 print_output = "\n".join(["{}: {}".format(letter, score) for letter, score in common_letters])
 print("\nMOST COMMON UNKNOWN LETTERS:")
 print(print_output)
+
 best_words = find_best_words_to_guess(dict(common_letters), filtered_words)
 print_output = "\n".join(["{}: {}".format(word, score) for word, score in best_words])
 print("\nBEST WORDS TO GUESS NEXT:")
