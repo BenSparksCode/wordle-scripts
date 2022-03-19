@@ -58,9 +58,12 @@ def find_best_words_to_guess(common_letters_dict, word_list):
         score = 0
         letters_checked = {} # {letter: bool}
         for letter in word:
-            if letter in common_letters_dict and not letter in letters_checked:
-                score += common_letters_dict[letter]
-                letters_checked[letter] = True
+            if letter in common_letters_dict:
+                if letter not in letters_checked:
+                    score += common_letters_dict[letter]
+                    letters_checked[letter] = True
+                else:
+                    score += 1
         word_scores[word] = score
     return sorted(word_scores.items(), key =
              lambda kv:(kv[1], kv[0]), reverse=True)
