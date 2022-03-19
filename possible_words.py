@@ -1,8 +1,8 @@
 # Fill in known letters
 
 GREEN_LETTERS = ["","","","",""]
-YELLOW_LETTERS = [["s", "c"],[],["o"],[],[]]
-EXCLUDED_LETTERS = ["a", "l", "e", "t", "r", "w", "d"]
+YELLOW_LETTERS = [[],[],["a","o"],[],["l"]]
+EXCLUDED_LETTERS = list("crtespi")
 INPUT_FILE = "shuffled_wordle_words.txt"
 
 with open(INPUT_FILE) as f:
@@ -56,10 +56,11 @@ def find_best_words_to_guess(common_letters_dict, word_list):
     word_scores = {} # {word: score}
     for word in word_list:
         score = 0
+        letters_checked = {} # {letter: bool}
         for letter in word:
-            # TODO refine to not reward words with repeated letters
-            if letter in common_letters_dict:
+            if letter in common_letters_dict and not letter in letters_checked:
                 score += common_letters_dict[letter]
+                letters_checked[letter] = True
         word_scores[word] = score
     return sorted(word_scores.items(), key =
              lambda kv:(kv[1], kv[0]), reverse=True)
