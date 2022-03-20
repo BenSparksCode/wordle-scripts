@@ -1,8 +1,9 @@
 # Fill in known letters
 
-GREEN_LETTERS = ["","","","",""]
-YELLOW_LETTERS = [[],[],["a","o"],[],["l"]]
-EXCLUDED_LETTERS = list("crtespi")
+GREEN_LETTERS = ["","","","e",""]
+YELLOW_LETTERS = [["n"],["r"],["e"],[],["n", "e"]]
+KNOWN_DOUBLE_LETTERS = ["e"]
+EXCLUDED_LETTERS = list("catoisyg")
 INPUT_FILE = "shuffled_wordle_words.txt"
 
 with open(INPUT_FILE) as f:
@@ -85,7 +86,17 @@ def filter_words_by_yellow_letters(yellow_letters, word_list):
             filtered_word_list.append(word)         
     return filtered_word_list
 
-
+def filter_words_by_double_letters(double_letters, word_list):
+    filtered_word_list = []
+    for word in word_list:
+        word_has_potential = True
+        for letter in double_letters:
+            if word.count(letter) < 2:
+                word_has_potential = False
+                break
+        if word_has_potential:
+            filtered_word_list.append(word)
+    return filtered_word_list
 
 # Words with GREEN letters
 filtered_words = filter_words_by_known_letters(GREEN_LETTERS, word_list)
@@ -100,6 +111,11 @@ print(filtered_words)
 # Words with YELLOW letters
 filtered_words = filter_words_by_yellow_letters(YELLOW_LETTERS, filtered_words)
 print("\nFILTERED BY KNOWN YELLOW LETTERS:")
+print(filtered_words)
+
+# Words with DOUBLE letters
+filtered_words = filter_words_by_double_letters(KNOWN_DOUBLE_LETTERS, filtered_words)
+print("\nFILTERED BY KNOWN DOUBLE LETTERS:")
 print(filtered_words)
 
 # Sort remaining words by most common unknown letters
