@@ -1,9 +1,9 @@
 # Fill in known letters
 
-GREEN_LETTERS = ["","","","e",""]
-YELLOW_LETTERS = [["n"],["r"],["e"],[],["n", "e"]]
-KNOWN_DOUBLE_LETTERS = ["e"]
-EXCLUDED_LETTERS = list("catoisyg")
+GREEN_LETTERS = ["","","","","r"]
+YELLOW_LETTERS = [[""],[""],["u"],[""],["e"]]
+KNOWN_DOUBLE_LETTERS = []
+EXCLUDED_LETTERS = list("staicopblwnkmfhydz")
 INPUT_FILE = "shuffled_wordle_words.txt"
 
 with open(INPUT_FILE) as f:
